@@ -1,0 +1,7 @@
+.nav li{
+    margin: 20px 0 0 5px;
+}
+
+.active{
+    color: greenyellow;
+}

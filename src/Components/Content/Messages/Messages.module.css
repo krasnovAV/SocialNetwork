@@ -1,0 +1,57 @@
+.style{
+    background: #fff;
+    width: 100%;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+}
+
+.user{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.userName{
+    margin: 0 0 0 10px;
+}
+
+.message{
+    margin: 10px;
+    padding: 10px;
+}
+
+.dialog{
+    margin: 10px;
+    padding: 10px;
+}
+
+.active{
+    color: rebeccapurple;
+    text-decoration: underline;
+    font-weight: 700;
+}
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+}
+
+.addMessage button{
+    background: #ad8795;
+    border-radius: 10px;
+    min-height: 25px;
+    width: 80px;
+    padding: 5px;
+    margin: 10px;
+}
+.addMessage textarea{
+    background: #ad8795;
+    border-radius: 10px;
+    min-height: 50px;
+    padding: 5px;
+    margin: 10px;
+}

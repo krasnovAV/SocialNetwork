@@ -1,0 +1,19 @@
+.style {
+    margin: 10px 0 0 10px;
+    color: rebeccapurple;
+}
+
+.img {
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+}
+
+.profileInfo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    background-color: #7cd6a6;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px 0 0px 20px;
+}

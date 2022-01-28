@@ -1,0 +1,54 @@
+.profile {
+
+}
+
+.profileInfo {
+
+    background-color: #7cd6a6;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px 0 0px 20px;
+}
+
+.img {
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+}
+
+.myPosts{
+    background: #deaf52;
+    border-radius: 10px;
+    margin: 10px 0 0 20px;
+    padding: 5px;
+}
+
+.addPost{
+    margin: 5px 0 10px 20px;
+}
+.addPost button{
+    padding: 5px;
+    width: auto;
+}
+
+.textArea{
+    border-radius: 10px;
+    padding: 5px;
+    width: auto;
+}
+
+.input{
+    border-radius: 10px;
+    padding: 5px;
+    width: auto;
+    margin: 0 0 0 20px;
+
+}
+
+.button{
+    height: 25px;
+    width: 100px;
+    border-radius: 10px;
+    color: #000;
+    background: #7cd6a6;
+}
