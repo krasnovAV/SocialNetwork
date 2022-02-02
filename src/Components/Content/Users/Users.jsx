@@ -1,8 +1,7 @@
 import React from "react";
 import style from "./Users.module.css"
 import userPhoto from "../../../Alfa_159_1.png"
-import NavLink from "react-router-dom/es/NavLink";
-import axios from "axios";
+import {NavLink} from "react-router-dom";
 
 
 let Users = (props) => {
@@ -13,11 +12,12 @@ let Users = (props) => {
     for (let i = 1; i <= 20; i++) {
         pages.push(i);
     }
+
     return <div className={style.usersPage}>
         {pages.map(p => {
             return <span className={props.currentPage === p && style.selectedPage}
                          onClick={() => {
-                             props.onPageChanged(p)
+                             props.onPageChanged(p, props.pageSize)
                          }}>{p}</span>
         })}
 
@@ -37,39 +37,11 @@ let Users = (props) => {
                 {u.followed ?
                     <button disabled={props.followingInProgress.includes(u.id)} className={style.button}
                             onClick={() => {
-                                props.toggleFollowingProgress(true, u.id);
-                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "2c2edca1-c413-48b3-ab9a-10cd3d1f5d35"
-                                    },
-                                })
-                                    .then(response => {
-                                        if (response.data.resultCode === 0) {
-                                            props.toggleFriend(u.id);
-                                        }
-                                        props.toggleFollowingProgress(false, u.id);
-                                    })
-
-                                //props.unfollow(u.id);
+                                props.unfollow(u.id);
                             }}>delete from friends</button> :
                     <button disabled={props.followingInProgress.includes(u.id)} className={style.button}
                             onClick={() => {
-                                props.toggleFollowingProgress(true, u.id);
-                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "2c2edca1-c413-48b3-ab9a-10cd3d1f5d35"
-                                    },
-                                })
-                                    .then(response => {
-                                        if (response.data.resultCode === 0) {
-                                            props.toggleFriend(u.id);
-                                        }
-                                        props.toggleFollowingProgress(false, u.id);
-                                    })
-
-                                //props.follow(u.id);
+                                props.follow(u.id);
                             }}>add to friends</button>}
             </div>
         </div>)}

@@ -2,37 +2,17 @@ import React from "react";
 import {connect} from "react-redux";
 import Users from "./Users";
 import Preloader from "../../Common/Preloader";
-import {
-    setCurrentPage,
-    setTotalUsersCount,
-    setUsers, toggleFollowingProgress,
-    toggleFriend,
-    toggleIsFetching
-} from "../../../redux/UsersPageReducer";
-import {userAPI} from "../../../api/api";
+import {follow, getUsers, onPageChanged, unfollow} from "../../../redux/UsersPageReducer";
+import {withAuthRedirect} from "../../../HOC/withAuthRedirect";
+import {compose} from "redux";
 
 class UsersContainer extends React.Component { // контейнерная классовая компонента для side эффектов
     componentDidMount() {
-        this.props.toggleIsFetching(true);
-
-        userAPI.getUsers(this.currentPage, this.props.pageSize) // если уберём props, то сначала
-            // загрузятся номера страниц, а чтобы загрузились пользователи нужно ещё раз нажать на номер страницы
-            .then(data => {
-                this.props.setUsers(data.items);
-                this.props.setTotalUsersCount(data.totalCount);
-                this.props.toggleIsFetching(false);
-            });
+        this.props.getUsers(this.currentPage, this.pageSize);  //стало
     }
 
-    onPageChanged(pageNumber) {
-        this.setCurrentPage(pageNumber);    //this.props.setCurrentPage(pageNumber) не работает
-        //this.props.toggleIsFetching(true);    // почему-то сдесь не работает
-        userAPI.getUsers(pageNumber, this.pageSize)
-            .then(data => {
-                this.setUsers(data.items);
-                //this.props.toggleIsFetching(false);
-            });
-    }
+    //onPageChanged(pageNumber)  //здесь не работает, вынес в UsersPageReducer и прокинул в User компоненту,
+    // а там уже вызвал. таким макаром работает
 
     render() {  // вынесли разметку в другой файл -> создали чистую функциональную компоненту и передали в нее пропсы
         // свойства this.props.pagesCount и другие UsersContainer берёт из connect(mapStateToProps, mapDispatchToProps)(UsersContainer)
@@ -43,13 +23,11 @@ class UsersContainer extends React.Component { // контейнерная кл�
                 totalUsersCount={this.props.totalUserCount}
                 pageSize={this.props.pageSize}
                 currentPage={this.props.currentPage}
-                onPageChanged={this.onPageChanged}
-                toggleFriend={this.props.toggleFriend}
-                setCurrentPage={this.props.setCurrentPage}
-                setUsers={this.props.setUsers}
-                followed={this.props.followed}
+                onPageChanged={this.props.onPageChanged}
                 followingInProgress={this.props.followingInProgress}
-                toggleFollowingProgress={this.props.toggleFollowingProgress}
+                follow={this.props.follow}
+                unfollow={this.props.unfollow}
+
             />
         </>
     }
@@ -66,10 +44,14 @@ let mapStateToProps = (state) => {
     }
 }
 
-// при сокращении на АС актион креейтеров мы передаем в connect объект содержащий action creaters а connect под капотом сам дописывает обертки колбэки над диспатчами
+/* было
+let AuthRedirectComponent = withAuthRedirect(UsersContainer);   //вызвали ХОК и обернули UsersContainer в новый контейнер
+// с возможностью редиректа если не авторизован и прокинули уже её в коннект
 export default connect(mapStateToProps,
-    {
-        toggleFriend, setUsers, setCurrentPage,
-        setTotalUsersCount, toggleIsFetching, toggleFollowingProgress
-    })(UsersContainer); // обернули одну конт комп в другую во внешней работа со state, во внутренней API запросы
-
+    {getUsers, onPageChanged, follow, unfollow})(AuthRedirectComponent); // обернули одну конт комп в другую во внешней работа со state, во внутренней API запросы
+*/
+// стало
+export default compose(
+    connect(mapStateToProps,{getUsers, onPageChanged, follow, unfollow}),
+    withAuthRedirect
+)(UsersContainer);

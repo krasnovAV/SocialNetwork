@@ -7,12 +7,6 @@ const ProfileInfo = (props) => {
         return <Preloader/>
     }
 
-    /*
-        let profileInfo = props.profileInfo.map(p =>
-            <div>
-                <div className={style.style}>{p.info}: {p.item}</div>
-            </div>)
-    */
     return (
         <div className={style.profileInfo}>
             <div>
@@ -36,11 +30,7 @@ const ProfileInfo = (props) => {
                     <div>github: {props.profile.contacts.github}</div>
                     <div>mainLink: {props.profile.contacts.mainLink}</div>
                 </div>
-
             </div>
-            {/*<div>
-                {props.profile}
-            </div>*/}
         </div>
     )
 

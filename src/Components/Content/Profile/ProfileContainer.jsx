@@ -2,40 +2,49 @@ import React from "react";
 import {
     addPost,
     updatePostImage,
-    updatePostBody, setUserProfile
+    updatePostBody, getProfile, getUserStatus, updateUserStatus
 } from "../../../redux/profilePageReducer";
 import Profile from "./Profile";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import {profileAPI} from "../../../api/api";
+import {compose} from "redux";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
         let userId = this.props.match.params.userId;
-
-        profileAPI.getProfile(userId)
-            .then(data => this.props.setUserProfile(data))
+        if (!userId) {
+            userId = 21754;
+        }
+        this.props.getProfile(userId);
+        this.props.getUserStatus(userId);
     }
 
     render() {
-        return <Profile {...this.props} profile={this.props.profile}/> // {...this.props} прокидываем все приходящие пропсы в контейнерную компоненту в презентационную
+        return <Profile profile={this.props.profile} profilePage={this.props.profilePage}
+                        status={this.props.status} updateUserStatus={this.props.updateUserStatus}/> // {...this.props} прокидываем все приходящие пропсы в контейнерную компоненту в презентационную
     }
 }
 
 let mapStateToProps = (state) => {
     return {
-        profilePage: state.profilePage,
         profile: state.profilePage.profile,
+        profilePage: state.profilePage,
+        status: state.profilePage.status,
     }
 }
 
-//const ProfileContainer = connect(mapStateToProps, mapDispatchToProps)(Profile);
-
-let withURLDataContComp = withRouter(ProfileContainer);// создали ещё одну конт комп, которая передаст данные из адресной строки
-
+// было
+/*let withURLDataContComp = withRouter(ProfileContainer);// создали ещё одну конт комп, которая передаст данные из адресной строки
 export default connect(mapStateToProps, {
     addPost,
     updatePostBody,
     updatePostImage,
-    setUserProfile
-})(withURLDataContComp);
+    getProfile
+})(withURLDataContComp);*/
+// стало
+export default compose(
+    withRouter,
+    connect(mapStateToProps, {addPost, updatePostBody, updatePostImage, getProfile,
+        getUserStatus, updateUserStatus}),
+)(ProfileContainer);
+

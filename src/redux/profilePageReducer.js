@@ -1,7 +1,10 @@
+import {profileAPI} from "../api/api";
+
 const ADD_POST = "ADD-POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const UPDATE_NEW_POST_IMAGE = "UPDATE-NEW-POST-IMAGE";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
+const SET_USER_STATUS = "SET_USER_STATUS";
 
 let initialState = {
     profile: null,
@@ -21,30 +24,9 @@ let initialState = {
             text: "none",
         },
     ],
-    profileInfo: [
-        {
-            info: "Школа",
-            item: "№1",
-        },
-        {
-            info: "институт",
-            item: "NSTU",
-        },
-        {
-            info: "работа",
-            item: "job",
-        },
-        {
-            info: "книги",
-            item: "books",
-        },
-        {
-            info: "хобби",
-            item: "hobbies",
-        },
-    ],
     newPostBody: "",
     urlImg: "",
+    status: "",
 }
 
 const profilePageReducer = (state = initialState, action) => {
@@ -74,6 +56,11 @@ const profilePageReducer = (state = initialState, action) => {
                 ...state,                           // делаем поверхностное копирование, примитивы будут свои, на объекты будут ссылки
                 urlImg: action.urlImg,              // заполняем значением из action
             };
+        case SET_USER_STATUS:
+            return {                                // сразу возвращаем новый элемент
+                ...state,                           // делаем поверхностное копирование, примитивы будут свои, на объекты будут ссылки
+                status: action.status,              // заполняем значением из action
+            };
         case SET_USER_PROFILE:
             return {...state, profile: action.profile};
         default:
@@ -85,5 +72,35 @@ export const addPost = () => ({type: ADD_POST});
 export const updatePostBody = (text) => ({type: UPDATE_NEW_POST_TEXT, newPostText: text});
 export const updatePostImage = (urlImg) => ({type: UPDATE_NEW_POST_TEXT, urlImg});
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile});
+export const setUserStatus = (status) => ({type: SET_USER_STATUS, status});
 
 export default profilePageReducer;
+
+//thunk
+export const getProfile = (userId) => {
+    return (dispatch) => {
+        profileAPI.getProfile(userId)
+            .then(data => {
+                dispatch(setUserProfile(data))
+            })
+    }
+}
+
+export const getUserStatus = (userId) => {
+    return (dispatch) => {
+        profileAPI.getUserStatus(userId)
+            .then(data => {
+                dispatch(setUserStatus(data))
+            })
+    }
+}
+export const updateUserStatus = (status) => {
+    return (dispatch) => {
+        profileAPI.updateStatus(status)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    dispatch(setUserStatus(status))
+                }
+            })
+    }
+}

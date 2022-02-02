@@ -2,6 +2,8 @@ import React from "react";
 import style from "./Profile.module.css"
 import Posts from "./Post/Posts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
+import ProfileStatus from "./ProfileInfo/ProfileStatus";
+import {updateUserStatus} from "../../../redux/profilePageReducer";
 
 const Profile = (props) => {
     let addPost = () => props.addPost()
@@ -20,8 +22,11 @@ const Profile = (props) => {
             <div className={style.profile}>
                 <div className={style.profileInfo}>
                     <div>
-                        <ProfileInfo profileInfo={props.profilePage.profileInfo} profile={props.profile}/>
+                        <ProfileInfo profile={props.profile}/>
                     </div>
+                </div>
+                <div>
+                    <ProfileStatus status={props.status} updateUserStatus={props.updateUserStatus}/>
                 </div>
 
                 <div className={style.myPosts}>
